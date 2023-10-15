@@ -15,7 +15,7 @@ try:
 	# import discord_self_embed
 
 	import updater
-	
+
 	from scripts import basketball
 
 except ModuleNotFoundError as e:
@@ -226,6 +226,9 @@ class TokenStuff:
 
 		elif len(accounts) > 1:
 			print('[+] {} valid tokens found'.format(len(accounts)))
+
+			if len({a['username'] for a in accounts}) == 1:
+				return accounts[0]
 
 			print('[?] Choose an account to log into:')
 			print('\n'.join(["\t{}. {}".format(i+1,a['username']) for i,a in enumerate(accounts)]))

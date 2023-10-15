@@ -43,7 +43,7 @@ def CompareData(directory):
 
 			print("[+] '{}' Updated!".format(path))
 
-print("[1] Checking for updates")
+print("[!] Checking for updates")
 
 CompareData(ReadDirectory())
 
