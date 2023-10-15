@@ -308,7 +308,7 @@ def ToggleListen(bot,m):
 def GetTime():
 	timestamp = int(time() - START_TIME)
 
-	hour,minute,second = timestamp // 360, timestamp // 60, timestamp % 60
+	hour,minute,second = timestamp // 3600, timestamp // 60, timestamp % 60
 
 	return "{}:{}:{}".format(
 		("0" + str(hour))[-2:],
