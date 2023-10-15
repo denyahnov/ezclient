@@ -12,8 +12,8 @@ def ReadDirectory(path="."):
 		if os.path.isdir(tmp):
 			files[tmp] = ReadDirectory(tmp)
 		elif tmp.endswith(".py"):
-			with open(tmp,"r") as f:
-				files[tmp] = f.read()
+			with open(tmp,"rb") as f:
+				files[tmp] = f.read().decode("utf-8").replace("\r\n","\n")
 
 	return files
 
@@ -34,12 +34,12 @@ def CompareData(directory):
 
 			continue
 
-		file_bytes = response.content.replace(b"\r\n",b"\n")
+		file_content = response.text.replace("\r\n","\n")
 
-		if data.encode('utf-8') != file_bytes:
+		if data != file_content:
 
-			with open(path,"wb") as file:
-				file.write(file_bytes)
+			with open(path,"w") as file:
+				file.write(file_content)
 
 			print("[+] '{}' Updated!".format(path))
 
