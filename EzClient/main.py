@@ -14,7 +14,10 @@ try:
 	import discum
 	# import discord_self_embed
 
+	import updater
+	
 	from scripts import basketball
+
 except ModuleNotFoundError as e:
 	print("[!] Missing module -> {}".format(e))
 	os.system("pip install -r requirements.txt")
@@ -34,7 +37,7 @@ class settings:
 
 class GUI:
 	def Reset():
-		os.system('cls')
+		# os.system('cls')
 		os.system('color 0f')
 
 	def LoggedOut():
@@ -448,4 +451,4 @@ if __name__ == '__main__':
 
 	client = EzClient(account)
 
-	# GUI.Reset()
+	GUI.Reset()

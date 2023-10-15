@@ -38,7 +38,7 @@ def CompareData(directory):
 
 		if data != file_content:
 
-			with open(path,"w") as file:
+			with open(path,"w",encoding="utf-8") as file:
 				file.write(file_content)
 
 			print("[+] '{}' Updated!".format(path))
