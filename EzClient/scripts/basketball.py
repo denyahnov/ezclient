@@ -7,19 +7,19 @@
 ### EDIT THESE TO CHANGE SETTINGS ###
 
 NOTIFICATIONS = { 			# Send desktop notification when cooldown ends
-	"Claim": 		False,
-	"Daily": 		False,
-	"Drop": 		False,
-	"Vote": 		False,
-	"Challenge": 	False,
+	"Claim": 		0,
+	"Daily": 		0,
+	"Drop": 		0,
+	"Vote": 		0,
+	"Challenge": 	0,
 }
 
 AUTOMATE = {				# Automatically respond to the command
-	"Claim": 		True,
-	"Daily": 		True,
-	"Drop": 		False,
-	"Vote": 		False,
-	"Challenge": 	False,
+	"Claim": 		1,
+	"Daily": 		1,
+	"Drop": 		0,
+	"Vote": 		0,
+	"Challenge": 	0,
 }
 
 DROP_PRIORITIES = [ 		# What card rarity you want picked in descending order
@@ -55,6 +55,7 @@ from threading import Thread
 
 import os
 import io
+import json
 import random
 import requests
 from PIL import Image, ImageDraw
@@ -98,6 +99,29 @@ def Notify(message):
 		app_icon="favicon.ico", 
 		timeout=3
 	)
+
+def Save():
+	with open("basketball_config.txt","w") as file:
+		json.dump({
+
+			"NOTIFICATIONS:": NOTIFICATIONS,
+			"AUTOMATE": AUTOMATE,
+			"DROP_PRIORITIES": DROP_PRIORITIES,
+
+		},file,indent=4)
+
+def Load():
+	with open("basketball_config.txt","r") as file:
+		data = json.load(file)
+
+		NOTIFICATIONS 	|= data["NOTIFICATIONS"]
+		AUTOMATE 		|= data["AUTOMATE"]
+		DROP_PRIORITIES |= data["DROP_PRIORITIES"]
+
+if os.path.exists("basketball_config.txt"):
+	Load()
+else:
+	Save()
 
 def ThrowError(title,error):
 	print("[!] <{}> -> {}".format(title,error))
