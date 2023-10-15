@@ -104,11 +104,11 @@ def Notify(message):
 
 def Save():
 	global NOTIFICATIONS, AUTOMATE, DROP_PRIORITIES
-	
+
 	with open("basketball_config.txt","w") as file:
 		json.dump({
 
-			"NOTIFICATIONS:": NOTIFICATIONS,
+			"NOTIFICATIONS": NOTIFICATIONS,
 			"AUTOMATE": AUTOMATE,
 			"DROP_PRIORITIES": DROP_PRIORITIES,
 
@@ -120,9 +120,10 @@ def Load():
 	with open("basketball_config.txt","r") as file:
 		data = json.load(file)
 
-		NOTIFICATIONS 	|= data["NOTIFICATIONS"]
-		AUTOMATE 		|= data["AUTOMATE"]
-		DROP_PRIORITIES |= data["DROP_PRIORITIES"]
+		NOTIFICATIONS 	|= 	data["NOTIFICATIONS"]
+		AUTOMATE 		|= 	data["AUTOMATE"]
+		
+		DROP_PRIORITIES	 =	data["DROP_PRIORITIES"]
 
 if os.path.exists("basketball_config.txt"):
 	Load()

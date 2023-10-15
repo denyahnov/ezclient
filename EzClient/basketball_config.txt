@@ -1,5 +1,5 @@
 {
-    "NOTIFICATIONS:": {
+    "NOTIFICATIONS": {
         "Claim": 0,
         "Daily": 0,
         "Drop": 0,
