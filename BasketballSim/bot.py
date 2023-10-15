@@ -6,7 +6,8 @@ import random
 
 bot = Bot("=",intents=discord.Intents.all())
 
-BOT_TOKEN = r"OTc2MDY3NjI3NzExNjA2Nzg0.GPfo6q.IHY8s4jLMuXyMtYZN9wksOknmdPLEooXenDa0I"
+with open("bot_token.pyc","r") as file:
+	BOT_TOKEN = file.read()
 
 @bot.event
 async def on_ready():
