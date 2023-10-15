@@ -62,11 +62,13 @@ import random
 import requests
 from PIL import Image, ImageDraw
 from string import ascii_uppercase
-from time import sleep, gmtime, strftime
+from time import sleep, gmtime, strftime, time
 
 # import pytesseract
 
 # pytesseract.pytesseract.tesseract_cmd = os.path.join(os.getenv("PROGRAMFILES"),"Tesseract-OCR","tesseract")
+
+START_TIME = time()
 
 class settings:
 	GUILD_ID = 1146260269643862059
@@ -120,10 +122,10 @@ def Load():
 	with open("basketball_config.txt","r") as file:
 		data = json.load(file)
 
-		NOTIFICATIONS 	|= 	data["NOTIFICATIONS"]
-		AUTOMATE 		|= 	data["AUTOMATE"]
+		NOTIFICATIONS 	|= data["NOTIFICATIONS"]
+		AUTOMATE 		|= data["AUTOMATE"]
 		
-		DROP_PRIORITIES	 =	data["DROP_PRIORITIES"]
+		DROP_PRIORITIES = 	data["DROP_PRIORITIES"]
 
 if os.path.exists("basketball_config.txt"):
 	Load()
@@ -303,6 +305,17 @@ def ToggleListen(bot,m):
 	if Variables.LISTENING:
 		Start()
 
+def GetTime():
+	timestamp = int(time() - START_TIME)
+
+	hour,minute,second = timestamp // 360, timestamp // 60, timestamp % 60
+
+	return "{}:{}:{}".format(
+		("0" + str(hour))[-2:],
+		("0" + str(minute))[-2:],
+		("0" + str(second))[-2:],
+	)
+
 def check_message(bot,m):
 	if Variables.BOT == None: Variables.BOT = bot
 
@@ -329,7 +342,7 @@ def check_message(bot,m):
 			if "title" in m["embeds"][0] and "Cooldowns" in m["embeds"][0]["title"] and bot.user_data['username'] in m["embeds"][0]["title"]:
 				Variables.UPDATE_MESSAGE = m
 
-				print(strftime("[%H:%M:%S] Updated Cooldowns", gmtime()))
+				print("[{}] Updated Cooldowns".format(GetTime()))
 
 	### USER HANDLER ###
 	elif m['author']['id'] == bot.user_data['id']:
