@@ -1,8 +1,6 @@
 
 
 
-
-
 #####################################
 ### EDIT THESE TO CHANGE SETTINGS ###
 
