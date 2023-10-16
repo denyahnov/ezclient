@@ -108,7 +108,7 @@ def Save():
 	with open("basketball_config.txt","w") as file:
 		json.dump({
 
-			"UPDATE_EVERY_SECS": Variables.UpdateDelay
+			"UPDATE_EVERY_SECS": Variables.UpdateDelay,
 			"NOTIFICATIONS": NOTIFICATIONS,
 			"AUTOMATE": AUTOMATE,
 			"DROP_PRIORITIES": DROP_PRIORITIES,
