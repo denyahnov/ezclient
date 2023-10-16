@@ -14,7 +14,7 @@ try:
 	import discum
 	# import discord_self_embed
 
-	# import updater
+	import updater
 
 	from scripts import basketball
 
