@@ -108,6 +108,7 @@ def Save():
 	with open("basketball_config.txt","w") as file:
 		json.dump({
 
+			"UPDATE_EVERY_SECS": Variables.UpdateDelay
 			"NOTIFICATIONS": NOTIFICATIONS,
 			"AUTOMATE": AUTOMATE,
 			"DROP_PRIORITIES": DROP_PRIORITIES,
@@ -125,9 +126,11 @@ def Load():
 		
 		DROP_PRIORITIES = 	data["DROP_PRIORITIES"]
 
-if os.path.exists("basketball_config.txt"):
+		Variables.UpdateDelay = data["UPDATE_EVERY_SECS"]
+
+try:
 	Load()
-else:
+except:
 	Save()
 
 def ThrowError(title,error):
