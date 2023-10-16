@@ -58,6 +58,7 @@ import io
 import json
 import random
 import requests
+from traceback import print_exc
 from PIL import Image, ImageDraw
 from string import ascii_uppercase
 from time import sleep, gmtime, strftime, time
