@@ -23,6 +23,7 @@ except ModuleNotFoundError as e:
 	os.system("pip install -r requirements.txt")
 	print("[+] You must restart the client to apply update")
 	input("[?] Press ENTER to close program")
+	exit()
 
 class settings:
 	SHOW_CONSOLE = False
