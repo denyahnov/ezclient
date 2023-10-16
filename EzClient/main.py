@@ -14,7 +14,7 @@ try:
 	import discum
 	# import discord_self_embed
 
-	import updater
+	# import updater
 
 	from scripts import basketball
 
@@ -32,8 +32,6 @@ class settings:
 	LOG_MY_COMMANDS = True
 	DELETE_COMMANDS = True
 	DETECT_PINGS = True
-
-	PROXY_HOST,PROXY_PORT = "202.61.228.195","8081"
 
 class GUI:
 	def Reset():
@@ -259,7 +257,6 @@ class EzClient(discum.Client):
 		self.prefix = '/'
 
 		super().__init__(token=self.token,log=False)
-		# super().__init__(token=self.token,log=False,proxy_host=settings.PROXY_HOST,proxy_port=settings.PROXY_PORT)
 		
 		GUI.LoggedIn()
 
