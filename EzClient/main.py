@@ -1,6 +1,7 @@
 try:
 	import os
 	import re
+	import sys
 	import json
 	import ctypes
 	import base64
@@ -47,6 +48,8 @@ class GUI:
 		os.system('color 0a')
 		ctypes.windll.kernel32.SetConsoleTitleW("EzClient | ezclient.me | v 1.04")
 
+def SpawnNewProcess(token):
+	os.system("start cmd /K python main.py {}".format(token))
 
 class TokenStuff:
 	def decrypt_val(buff: bytes, master_key: bytes) -> str:
@@ -419,6 +422,12 @@ class EzClient(discum.Client):
 
 			print("[>] You are now in {} squad".format(args[0].lower()))
 
+		elif command == 'spawn':
+			if len(args) == 0:
+				print("[>] No token parsed"); return
+
+			SpawnNewProcess(args[0])
+
 	def send_hidden_text(self,channel_id,string):
 		self.sendMessage(channel_id,self.hide_text + string)
 
@@ -448,7 +457,19 @@ if __name__ == '__main__':
 
 	GUI.LoggedOut()
 
-	account = TokenStuff.FindAllAccounts()
+	args = sys.argv
+
+	if len(args) == 1:
+		account = TokenStuff.FindAllAccounts()
+
+	else:
+		print("[+] Using token argument to login")
+		
+		token = args[1]
+
+		account = TokenStuff.CheckToken(token)
+
+		if account == {}: exit("[!] Invalid Token Parsed")
 
 	client = EzClient(account)
 
