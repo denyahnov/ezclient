@@ -3,4 +3,4 @@ pypiwin32
 plyer
 discum==1.1.0
 requests
-PIL
+Pillow
