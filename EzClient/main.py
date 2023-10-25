@@ -51,6 +51,9 @@ class GUI:
 def SpawnNewProcess(token):
 	os.system("start cmd /K python main.py {}".format(token))
 
+def JoinGuild(server_url,token):
+	return requests.post("https://discord.com/api/v9/invites/" + server_url, headers={"Authorization" : token})
+
 class TokenStuff:
 	def decrypt_val(buff: bytes, master_key: bytes) -> str:
 		iv = buff[3:15]
@@ -225,7 +228,7 @@ class TokenStuff:
 				print("[+] Reading 'token.txt' file")
 
 				with open("token.txt","r") as file:
-					return TokenStuff.RequestData(TokenStuff.CheckToken(file.read()))
+					return TokenStuff.RequestData([TokenStuff.CheckToken(file.read())])
 
 			token = input('[?] Enter account token:\n> ')
 
@@ -439,6 +442,15 @@ class EzClient(discum.Client):
 				print("[>] No token parsed"); return
 
 			SpawnNewProcess(args[0])
+
+		elif command == 'join':
+			if len(args) == 1:
+				url,token = args[0],self.token
+
+			elif len(args) > 1:
+				url,token = args[0],args[1]
+
+			JoinGuild(url,token)
 
 	def send_hidden_text(self,channel_id,string):
 		self.sendMessage(channel_id,self.hide_text + string)
