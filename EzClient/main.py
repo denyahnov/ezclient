@@ -1,7 +1,5 @@
 try:
-	import os
-	import re
-	import sys
+	import os, re, sys
 	import json
 	import ctypes
 	import base64
@@ -28,7 +26,7 @@ except ModuleNotFoundError as e:
 
 class settings:
 	SHOW_CONSOLE = False
-	SHOW_ERRORS = False
+	SHOW_ERRORS = True
 	READ_ALL_MESSAGES = False
 	LOG_MY_MESSAGES = False
 	LOG_MY_COMMANDS = True
@@ -44,12 +42,12 @@ class GUI:
 		os.system('color 0c')
 		ctypes.windll.kernel32.SetConsoleTitleW("EzClient Login")
 
-	def LoggedIn():
+	def LoggedIn(username=None):
 		os.system('color 0a')
-		ctypes.windll.kernel32.SetConsoleTitleW("EzClient | ezclient.me | v 1.04")
+		ctypes.windll.kernel32.SetConsoleTitleW("EzClient | ezclient.me | v 2.03{}".format(" | @{}".format(username) if username else ""))
 
 def SpawnNewProcess(token):
-	os.system("start cmd /K python main.py {}".format(token))
+	os.system("start cmd /K python {} {}".format(__file__, token))
 
 def JoinGuild(server_url,token):
 	return requests.post("https://discord.com/api/v9/invites/" + server_url, headers={"Authorization" : token})
@@ -228,7 +226,7 @@ class TokenStuff:
 				print("[+] Reading 'token.txt' file")
 
 				with open("token.txt","r") as file:
-					return TokenStuff.RequestData([TokenStuff.CheckToken(file.read())])[0]
+					return TokenStuff.RequestData([TokenStuff.CheckToken(file.read())])
 
 			token = input('[?] Enter account token:\n> ')
 
@@ -275,14 +273,16 @@ class EzClient(discum.Client):
 
 		self.prefix = '/'
 
+		self.kill_me = False
+
 		super().__init__(token=self.token,log=False)
 		
-		GUI.LoggedIn()
+		GUI.LoggedIn(self.user_data["username"])
 
 		self.init_stuff()
 		self.import_commands()
 
-		while True:
+		while not self.kill_me:
 			try:
 				self.gateway.run(auto_reconnect=True)
 			except:
@@ -350,6 +350,9 @@ class EzClient(discum.Client):
 		except KeyError:
 			return {}
 
+	def RestartProcess(self):
+		os.execl(sys.executable, "python", __file__, self.token)
+
 	def import_commands(self):
 		@self.gateway.command
 		def helloworld(resp):
@@ -402,9 +405,13 @@ class EzClient(discum.Client):
 		command, args = split[0][1:], split[1:]
 
 		if command == 'close':
-			self.close()
+			self.gateway.close()
+
+			self.kill_me = True
 
 			print("[!] Client closed")
+
+			sys.exit("[!] Closed via command")
 
 		elif command == 'check':
 			check = TokenStuff.CheckToken(args[0])
@@ -451,6 +458,13 @@ class EzClient(discum.Client):
 				url,token = args[0],args[1]
 
 			JoinGuild(url,token)
+
+		elif command == 'restart':
+			self.RestartProcess()
+
+			self.gateway.close()
+
+			self.kill_me = True
 
 	def send_hidden_text(self,channel_id,string):
 		self.sendMessage(channel_id,self.hide_text + string)
