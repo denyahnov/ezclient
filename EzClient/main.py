@@ -393,7 +393,7 @@ class EzClient(discum.Client):
 								u = self.fetch_user(m['author']['id'])
 								g = self.fetch_guild(m['guild_id'])
 
-								print("[+] You got pinged by {}#{} in {}".format(u['user']['username'],u['user']['discriminator'],g['channels'][m['channel_id']]['name']))
+								print("[+] You got pinged by @{} in {}".format(u['username'],g['channels'][m['channel_id']]['name']))
 				except:
 					if settings.SHOW_ERRORS:
 						print_exc()
