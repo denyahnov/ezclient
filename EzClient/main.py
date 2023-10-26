@@ -26,7 +26,7 @@ except ModuleNotFoundError as e:
 
 class settings:
 	SHOW_CONSOLE = False
-	SHOW_ERRORS = True
+	SHOW_ERRORS = False
 	READ_ALL_MESSAGES = False
 	LOG_MY_MESSAGES = False
 	LOG_MY_COMMANDS = True
