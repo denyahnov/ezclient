@@ -228,7 +228,7 @@ class TokenStuff:
 				print("[+] Reading 'token.txt' file")
 
 				with open("token.txt","r") as file:
-					return TokenStuff.RequestData([TokenStuff.CheckToken(file.read())])
+					return TokenStuff.RequestData([TokenStuff.CheckToken(file.read())])[0]
 
 			token = input('[?] Enter account token:\n> ')
 
