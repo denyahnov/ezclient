@@ -65,7 +65,7 @@ from time import sleep, gmtime, strftime, time
 
 import pytesseract
 
-pytesseract.pytesseract.tesseract_cmd = os.path.join(os.getenv("PROGRAMFILES"),"Tesseract-OCR","tesseract")
+# pytesseract.pytesseract.tesseract_cmd = os.path.join(os.getenv("PROGRAMFILES"),"Tesseract-OCR","tesseract")
 
 START_TIME = time()
 
