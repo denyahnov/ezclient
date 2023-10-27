@@ -21,7 +21,7 @@ except ModuleNotFoundError as e:
 	print("[!] Missing module -> {}".format(e))
 	os.system("pip install -r requirements.txt")
 	print("[+] You must restart the client to apply update")
-	input("[?] Press ENTER to close program")
+	os.execl(sys.executable, "python", *sys.arv)
 	exit(1)
 
 class settings:
