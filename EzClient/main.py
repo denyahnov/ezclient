@@ -50,7 +50,7 @@ def SpawnNewProcess(token):
 	os.system("start cmd /K python {} {}".format(__file__, token))
 
 def JoinGuild(server_url,token):
-	return requests.post("https://discord.com/api/v9/invites/" + server_url, headers={"Authorization" : token})
+	return
 
 def FindMentionID(string):
 	return string.split("<@")[-1].split(">")[0]
