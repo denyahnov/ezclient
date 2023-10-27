@@ -138,8 +138,6 @@ def ThrowError(title,error):
 	print("[!] <{}> -> {}".format(title,error))
 
 def DropPick(m):
-	return 69
-
 	if not AUTOMATE["Drop"]:
 		return 1
 
