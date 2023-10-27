@@ -4,3 +4,4 @@ plyer
 discum==1.1.0
 requests
 Pillow
+pytesseract

@@ -10,7 +10,7 @@
     "AUTOMATE": {
         "Claim": 1,
         "Daily": 1,
-        "Drop": 0,
+        "Drop": 1,
         "Vote": 0,
         "Challenge": 0
     },
